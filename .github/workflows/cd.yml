@@ -61,3 +61,46 @@ jobs:
         run: |
           sleep 5
           curl -f http://localhost:80 && echo "✅ Site accessible sur le port 80"
+
+  # ── JOB NOTIFICATION EMAIL ──────────────────────────────────
+  notify:
+    name: Notification Email
+    runs-on: ubuntu-latest
+    needs: [ security-scan, deploy ]
+    if: always()
+    steps:
+      - name: Envoyer email de succès
+        if: ${{ needs.deploy.result == 'success' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ [CD] Déploiement prod – SUCCÈS – ${{ github.repository }}"
+          body: |
+            Le déploiement en production s'est terminé avec succès.
+            Repository : ${{ github.repository }}
+            Commit     : ${{ github.sha }}
+            Auteur     : ${{ github.actor }}
+            Site accessible sur : http://localhost:80
+          to: moussawade@groupeisi.com
+          from: ${{ secrets.EMAIL_USERNAME }}
+
+      - name: Envoyer email d'échec
+        if: ${{ failure() }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ [CD] Déploiement prod – ÉCHEC – ${{ github.repository }}"
+          body: |
+            ATTENTION : Le déploiement en production a échoué.
+            Repository : ${{ github.repository }}
+            Commit     : ${{ github.sha }}
+            Auteur     : ${{ github.actor }}
+            Vérifiez les logs : ${{ github.server_url }}/${{ github.repository }}/actions
+          to: moussawade@groupeisi.com
+          from: ${{ secrets.EMAIL_USERNAME }}
