@@ -455,24 +455,18 @@
 			#one article:nth-child(5) { transition-delay: 0.33s; }
 			#one article:nth-child(6) { transition-delay: 0.40s; }
 
-			/* ── HEADER NAV BURGER ──────────────────────────────── */
-			#header nav a[href="#menu"] {
-				color: rgba(255,255,255,0.85) !important;
-				border-color: rgba(255,255,255,0.3) !important;
+			/* ── HEADER NAV ──────────────────────────────────────── */
+			/* Ne pas toucher le padding du burger — le template gère l'icône SVG */
+			#header nav a {
 				font-family: var(--font-body) !important;
-				font-size: 0.75em !important;
-				font-weight: 500 !important;
-				letter-spacing: 0.12em !important;
-				text-transform: uppercase !important;
-				padding: 0.45em 1.1em !important;
-				border-radius: 2px !important;
-				transition: background 0.3s, border-color 0.3s, color 0.3s !important;
+				color: rgba(255,255,255,0.85) !important;
+				border-color: rgba(255,255,255,0.25) !important;
 			}
 
-			#header nav a[href="#menu"]:hover {
-				background: rgba(201,168,76,0.15) !important;
-				border-color: var(--gold) !important;
+			#header nav a:hover {
 				color: var(--gold) !important;
+				border-color: var(--gold) !important;
+				background: rgba(201,168,76,0.08) !important;
 			}
 
 			/* ── MENU PANEL ──────────────────────────────────────── */
