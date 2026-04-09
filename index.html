@@ -56,34 +56,14 @@
 				letter-spacing: 0.01em;
 			}
 
-			/* ── HEADER ──────────────────────────────────────────── */
-			#header {
-				background: transparent;
-				transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
-			}
-
-			#header.scrolled {
-				background: rgba(10, 22, 40, 0.82) !important;
-				backdrop-filter: blur(18px);
-				-webkit-backdrop-filter: blur(18px);
-				box-shadow: 0 1px 0 rgba(201, 168, 76, 0.25);
-			}
-
+			/* ── HEADER – typo uniquement, ne pas toucher layout/background ── */
 			#header .logo strong {
 				font-family: var(--font-display) !important;
-				font-weight: 700;
-				font-size: 1.15em;
-				color: var(--white);
 				letter-spacing: 0.04em;
 			}
-
 			#header .logo span {
 				font-family: var(--font-body) !important;
-				font-weight: 300;
-				font-size: 0.78em;
 				color: var(--gold-lt);
-				letter-spacing: 0.08em;
-				text-transform: uppercase;
 			}
 
 			/* ── BANNER ──────────────────────────────────────────── */
@@ -455,19 +435,6 @@
 			#one article:nth-child(5) { transition-delay: 0.33s; }
 			#one article:nth-child(6) { transition-delay: 0.40s; }
 
-			/* ── HEADER NAV ──────────────────────────────────────── */
-			/* Ne pas toucher le padding du burger — le template gère l'icône SVG */
-			#header nav a {
-				font-family: var(--font-body) !important;
-				color: rgba(255,255,255,0.85) !important;
-				border-color: rgba(255,255,255,0.25) !important;
-			}
-
-			#header nav a:hover {
-				color: var(--gold) !important;
-				border-color: var(--gold) !important;
-				background: rgba(201,168,76,0.08) !important;
-			}
 
 			/* ── MENU PANEL ──────────────────────────────────────── */
 			#menu {
@@ -834,16 +801,7 @@
 					document.getElementById('scroll-progress').style.width = progress + '%';
 				});
 
-				// Sticky header glass effect
-				window.addEventListener('scroll', function() {
-					var header = document.getElementById('header');
-					if (window.scrollY > 60) {
-						header.classList.add('scrolled');
-					} else {
-						header.classList.remove('scrolled');
-					}
-				});
-
+	
 				// Scroll reveal for tiles
 				var revealEls = document.querySelectorAll('.reveal');
 				var observer = new IntersectionObserver(function(entries) {
