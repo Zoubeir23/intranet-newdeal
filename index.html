@@ -407,63 +407,6 @@
 				margin: 0 !important;
 			}
 
-			/* ── CONTACT SECTION ─────────────────────────────────── */
-			#contact {
-				background: #f4f1ea !important;
-			}
-
-			#contact .inner > section:first-child {
-				border-right: 1px solid rgba(10,22,40,0.1);
-			}
-
-			#contact label {
-				font-family: var(--font-body) !important;
-				font-weight: 500 !important;
-				font-size: 0.72em !important;
-				letter-spacing: 0.1em !important;
-				text-transform: uppercase !important;
-				color: var(--navy) !important;
-			}
-
-			#contact input, #contact textarea {
-				font-family: var(--font-body) !important;
-				border-color: rgba(10,22,40,0.2) !important;
-				background: rgba(255,255,255,0.7) !important;
-				color: var(--navy) !important;
-				border-radius: 2px !important;
-				transition: border-color 0.3s, box-shadow 0.3s !important;
-			}
-
-			#contact input:focus, #contact textarea:focus {
-				border-color: var(--green) !important;
-				box-shadow: 0 0 0 3px rgba(0,106,78,0.12) !important;
-				outline: none;
-			}
-
-			#contact input[type="submit"] {
-				background: var(--green) !important;
-				border-color: var(--green) !important;
-				font-family: var(--font-body) !important;
-				font-weight: 500 !important;
-				letter-spacing: 0.08em !important;
-				border-radius: 2px !important;
-				transition: background 0.3s, transform 0.3s !important;
-			}
-
-			#contact input[type="submit"]:hover {
-				background: var(--green-lt) !important;
-				transform: translateY(-1px);
-			}
-
-			.contact-method h3 {
-				font-family: var(--font-display) !important;
-				font-size: 1.1em !important;
-				color: var(--navy) !important;
-			}
-
-			.contact-method .icon {
-				color: var(--green) !important;
-			}
 
 			/* ── FOOTER ──────────────────────────────────────────── */
 			#footer {
@@ -512,7 +455,27 @@
 			#one article:nth-child(5) { transition-delay: 0.33s; }
 			#one article:nth-child(6) { transition-delay: 0.40s; }
 
-			/* ── MENU ────────────────────────────────────────────── */
+			/* ── HEADER NAV BURGER ──────────────────────────────── */
+			#header nav a[href="#menu"] {
+				color: rgba(255,255,255,0.85) !important;
+				border-color: rgba(255,255,255,0.3) !important;
+				font-family: var(--font-body) !important;
+				font-size: 0.75em !important;
+				font-weight: 500 !important;
+				letter-spacing: 0.12em !important;
+				text-transform: uppercase !important;
+				padding: 0.45em 1.1em !important;
+				border-radius: 2px !important;
+				transition: background 0.3s, border-color 0.3s, color 0.3s !important;
+			}
+
+			#header nav a[href="#menu"]:hover {
+				background: rgba(201,168,76,0.15) !important;
+				border-color: var(--gold) !important;
+				color: var(--gold) !important;
+			}
+
+			/* ── MENU PANEL ──────────────────────────────────────── */
 			#menu {
 				font-family: var(--font-body) !important;
 				background: var(--navy-md) !important;
@@ -521,6 +484,101 @@
 			#menu ul.links a {
 				font-family: var(--font-body) !important;
 				letter-spacing: 0.06em;
+				color: rgba(250,250,248,0.8) !important;
+			}
+
+			#menu ul.links a:hover {
+				color: var(--gold) !important;
+			}
+
+			/* ── CONTACT SECTION FIX ─────────────────────────────── */
+			#contact {
+				background: var(--navy) !important;
+			}
+
+			#contact .inner > section:first-child {
+				border-right: 1px solid rgba(201,168,76,0.15);
+			}
+
+			#contact label {
+				font-family: var(--font-body) !important;
+				font-weight: 500 !important;
+				font-size: 0.72em !important;
+				letter-spacing: 0.1em !important;
+				text-transform: uppercase !important;
+				color: rgba(250,250,248,0.7) !important;
+			}
+
+			#contact input, #contact textarea {
+				font-family: var(--font-body) !important;
+				border-color: rgba(201,168,76,0.2) !important;
+				background: rgba(255,255,255,0.06) !important;
+				color: var(--white) !important;
+				border-radius: 2px !important;
+				transition: border-color 0.3s, box-shadow 0.3s !important;
+			}
+
+			#contact input::placeholder, #contact textarea::placeholder {
+				color: rgba(250,250,248,0.3) !important;
+			}
+
+			#contact input:focus, #contact textarea:focus {
+				border-color: var(--green) !important;
+				box-shadow: 0 0 0 3px rgba(0,106,78,0.2) !important;
+				outline: none;
+				background: rgba(255,255,255,0.1) !important;
+			}
+
+			#contact input[type="submit"] {
+				background: var(--green) !important;
+				border-color: var(--green) !important;
+				font-family: var(--font-body) !important;
+				font-weight: 500 !important;
+				letter-spacing: 0.08em !important;
+				border-radius: 2px !important;
+				color: #fff !important;
+				transition: background 0.3s, transform 0.3s !important;
+			}
+
+			#contact input[type="submit"]:hover {
+				background: var(--green-lt) !important;
+				transform: translateY(-1px);
+			}
+
+			#contact input[type="reset"] {
+				border-color: rgba(201,168,76,0.3) !important;
+				color: rgba(250,250,248,0.6) !important;
+				background: transparent !important;
+			}
+
+			#contact input[type="reset"]:hover {
+				border-color: var(--gold) !important;
+				color: var(--gold) !important;
+			}
+
+			.contact-method h3 {
+				font-family: var(--font-display) !important;
+				font-size: 1.1em !important;
+				color: var(--white) !important;
+			}
+
+			.contact-method a, .contact-method span {
+				color: rgba(250,250,248,0.65) !important;
+			}
+
+			.contact-method a:hover {
+				color: var(--gold) !important;
+			}
+
+			.contact-method .icon {
+				color: var(--green) !important;
+				border-color: rgba(0,106,78,0.3) !important;
+			}
+
+			/* Section label in contact (dark bg) */
+			#contact .section-label {
+				color: var(--gold) !important;
+				border-left-color: var(--green) !important;
 			}
 
 			/* ── RESPONSIVE ──────────────────────────────────────── */
@@ -697,7 +755,7 @@
 					<section id="contact">
 						<div class="inner">
 							<section>
-								<span class="section-label" style="color: var(--navy);">Nous contacter</span>
+								<span class="section-label">Nous contacter</span>
 								<form method="post" action="#">
 									<div class="fields">
 										<div class="field half">
