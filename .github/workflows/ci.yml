@@ -1,0 +1,133 @@
+name: CI Pipeline – Dev
+
+on:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+
+  # ── JOB 1 : Build de l'image Docker ────────────────────────
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Configurer Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Connexion à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build de l'image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-${{ github.sha }} .
+          docker save ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-${{ github.sha }} -o image.tar
+
+      - name: Sauvegarder l'image comme artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-image
+          path: image.tar
+
+  # ── JOB 2 : Scan de sécurité ────────────────────────────────
+  security-scan:
+    name: Scan Sécurité (Trivy)
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Télécharger l'image artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Charger l'image Docker
+        run: docker load -i image.tar
+
+      - name: Scan vulnérabilités avec Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-${{ github.sha }}
+          format: table
+          exit-code: 1
+          severity: CRITICAL
+
+      - name: Scan secrets avec Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── JOB 3 : Push vers Docker Hub ────────────────────────────
+  push:
+    name: Push Docker Hub
+    runs-on: ubuntu-latest
+    needs: security-scan
+    steps:
+      - name: Télécharger l'image artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-image
+
+      - name: Charger l'image Docker
+        run: docker load -i image.tar
+
+      - name: Connexion à Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push de l'image
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-${{ github.sha }} \
+                     ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/intranet-newdeal:dev-latest
+
+  # ── JOB NOTIFICATION EMAIL ──────────────────────────────────
+  notify:
+    name: Notification Email
+    runs-on: ubuntu-latest
+    needs: [ build, security-scan, push ]
+    if: always()
+    steps:
+      - name: Envoyer email de succès
+        if: ${{ needs.push.result == 'success' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "✅ [CI] Pipeline dev – SUCCÈS – ${{ github.repository }}"
+          body: |
+            Le pipeline CI sur la branche dev s'est terminé avec succès.
+            Repository : ${{ github.repository }}
+            Commit     : ${{ github.sha }}
+            Auteur     : ${{ github.actor }}
+          to: moussawade@groupeisi.com
+          from: ${{ secrets.EMAIL_USERNAME }}
+
+      - name: Envoyer email d'échec
+        if: ${{ failure() }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "❌ [CI] Pipeline dev – ÉCHEC – ${{ github.repository }}"
+          body: |
+            ATTENTION : Le pipeline CI sur la branche dev a échoué.
+            Repository : ${{ github.repository }}
+            Commit     : ${{ github.sha }}
+            Auteur     : ${{ github.actor }}
+            Vérifiez les logs : ${{ github.server_url }}/${{ github.repository }}/actions
+          to: moussawade@groupeisi.com
+          from: ${{ secrets.EMAIL_USERNAME }}
